@@ -13,6 +13,23 @@ class Bird {
     }
 };
 
+Bird.prototype.flap = function(){
+    if (this.y - 5 <= 0){
+        this.y = 0;
+    } else {
+        this.y -= 5;
+    }
+}
+
+Bird.prototype.fall = function(){
+    if (this.y + 5 >= context.canvas.height){
+        this.y  = context.canvas.height;
+    } else {
+        this.y += 5;
+    }
+}
+
+
 Bird.prototype.draw = function() {
     context.drawImage(img, this.x, this.y);
 }
@@ -59,10 +76,10 @@ class Grass extends Scenery{
 }
 
 
-class Clouds extends Scenery{
+class Cloud extends Scenery{
     constructor(x, y, width, height, xMoveAmount, yMoveAmount, image){
         super(x, y, width, height, xMoveAmount, yMoveAmount);
-        this.img = 'assets/grass.jpeg';
+        this.img = 'assets/cloud.jpeg';
     }
 }
 
