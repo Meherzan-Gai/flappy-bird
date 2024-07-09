@@ -14,7 +14,7 @@
   }
   
   body {
-    width: 88%;
+    width: 90%;
     height:86%;
     margin: 5%;
     margin-top: 1%;
@@ -28,5 +28,9 @@
   }
 
   canvas{
-    padding: 1%;
+    width:100%;
+    padding-top: 1%;
+    padding-bottom: 1%;
   }
+
+ 
