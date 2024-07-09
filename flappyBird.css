@@ -6,7 +6,7 @@
   
   }
   
-  html, body {
+  html {
   
     height:100%;
     width:100%;
@@ -14,7 +14,10 @@
   }
   
   body {
-  
+    width: 88%;
+    height:86%;
+    margin: 5%;
+    margin-top: 1%;
     align-content:space-around;
     text-align: center;
     background-color:#545f5f;
@@ -22,4 +25,8 @@
     display:grid;
     justify-content:center;
   
+  }
+
+  canvas{
+    padding: 1%;
   }

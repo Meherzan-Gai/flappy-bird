@@ -1,8 +1,6 @@
-const context = document.querySelector("canvas").getContext("2d");
 
-context.canvas.height = 400;
-context.canvas.width = 1220;
 
+function init(){
 class Bird {
     constructor(img, width, height){
         this.img = img;
@@ -60,6 +58,7 @@ class Scenery{
         this.height = height;
         this.xMoveAmount = xMoveAmount;
         this.yMoveAmount = yMoveAmount;
+        this.image = new Image(width,height);
     }
 }
 
@@ -68,18 +67,60 @@ Scenery.prototype.moveScenery = function(){
     this.y -= yMoveAmount;
 }
 
+Scenery.prototype.draw = function(){
+    context.drawImage(this.image, this.x, this.y, this.width, this.height);
+}
+
 class Grass extends Scenery{
-    constructor(x, y, width, height, xMoveAmount, yMoveAmount, image){
+    constructor(x, y, width, height, xMoveAmount, yMoveAmount){
         super(x, y, width, height, xMoveAmount, yMoveAmount);
-        this.img = 'assets/grass.jpeg';
+        this.image = 'assets/grass.jpeg';
     }
 }
 
 
 class Cloud extends Scenery{
-    constructor(x, y, width, height, xMoveAmount, yMoveAmount, image){
+    constructor(x, y, width, height, xMoveAmount, yMoveAmount){
         super(x, y, width, height, xMoveAmount, yMoveAmount);
-        this.img = 'assets/cloud.jpeg';
+        this.image.src = 'assets/cloud.jpg';
     }
 }
 
+
+const clouds = [];
+
+for (var i = 0; i < 8; i++){
+    clouds.push(new Cloud(i*Math.random(100,300), Math.random(100,200),40,40,2,0));
+}
+
+for (var j = 0; j < 8; j++){
+    clouds[j].draw();    
+}
+
+
+}
+
+
+    
+
+
+
+
+function draw(){
+    const context = document.querySelector("canvas").getContext("2d", { alpha: false });
+    const bodycontext = document.querySelector("body");
+    context.canvas.height = bodycontext.clientHeight;
+    context.canvas.width = bodycontext.clientWidth;
+
+    context.beginPath();
+    context.arc(75, 75, 50, 0, Math.PI * 2, true); // Outer circle
+    context.moveTo(110, 75);
+    context.arc(75, 75, 35, 0, Math.PI, false); // Mouth (clockwise)
+    context.moveTo(65, 65);
+    context.arc(60, 65, 5, 0, Math.PI * 2, true); // Left eye
+    context.moveTo(95, 65);
+    context.arc(90, 65, 5, 0, Math.PI * 2, true); // Right eye
+    context.stroke(); 
+}
+
+draw();
