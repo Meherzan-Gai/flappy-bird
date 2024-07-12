@@ -1,5 +1,4 @@
-
-    class Bird {
+    class Fish {
         constructor(img, width, height, context){
             this.img = img;
             this.x = 100;
@@ -10,7 +9,7 @@
         }
     };
     
-    Bird.prototype.flap = function(){
+    Fish.prototype.jump = function(){
         if (this.y - 5 <= 0){
             this.y = 0;
         } else {
@@ -18,7 +17,7 @@
         }
     }
     
-    Bird.prototype.fall = function(){
+    Fish.prototype.fall = function(){
         if (this.y + 5 >= this.context.canvas.height){
             this.y  = this.context.canvas.height;
         } else {
@@ -27,7 +26,7 @@
     }
     
     
-    Bird.prototype.draw = function() {
+    Fish.prototype.draw = function() {
         this.context.drawImage(this.img, this.x, this.y);
     }
     
@@ -64,28 +63,33 @@
     }
     
     Scenery.prototype.moveScenery = function(){
-        this.x -= xMoveAmount;
-        this.y -= yMoveAmount;
+        this.x -= this.xMoveAmount;
+        this.y -= this.yMoveAmount;
+        if (this.x + this.width < 0){
+            this.x = this.context.canvas.width;
+        }
+
+        if (this.y < 0 || this.y + this.height > 200){
+            this.yMoveAmount *= -1;
+        }
     }
     
     Scenery.prototype.draw = function(){
-        this.image.addEventListener("load", () => {
-            this.context.drawImage(this.image, this.x, this.y, this.width, this.height);
-        });
+        this.context.drawImage(this.image, this.x, this.y, this.width, this.height);
     }
     
-    class Grass extends Scenery{
-        constructor(x, y, width, height, xMoveAmount, yMoveAmount, context){
+    class Algae extends Scenery{
+        constructor(x, y, width, height, xMoveAmount, yMoveAmount, context, src){
             super(x, y, width, height, xMoveAmount, yMoveAmount, context);
-            this.image.src = 'assets/grass.jpeg';
+            this.image.src = src;
         }
     }
     
     
     class Cloud extends Scenery{
-        constructor(x, y, width, height, xMoveAmount, yMoveAmount, context){
+        constructor(x, y, width, height, xMoveAmount, yMoveAmount, context, src){
             super(x, y, width, height, xMoveAmount, yMoveAmount, context);
-            this.image.src = 'assets/cloud.jpg';
+            this.image.src = src;
         }
     }
 
@@ -94,26 +98,36 @@
 
 
 
-function draw(){
     const context = document.querySelector("canvas").getContext("2d", { alpha: false });
     const bodycontext = document.querySelector("body");
-    context.canvas.height = bodycontext.clientHeight;
     context.canvas.width = bodycontext.clientWidth;
-    context.fillStyle = '#FFFFFF';
+    context.canvas.height = bodycontext.clientHeight;
+    context.fillStyle = '#1f41db';
+    context.fillRect(0,0,context.canvas.width, context.canvas.height);
 
 
     const clouds = [];
+    const algae = [];
     
+   
     for (var i = 0; i < 8; i++){
-       clouds.push(new Cloud(i*Math.random()*200+100, i*Math.random()*200+100,40,40,2,0, context));
+        clouds.push(new Cloud(i*Math.random()*200+100, Math.random()*200,40,40, Math.random() * 2, Math.random()*1 , context, 'assets/cloud.jpg'));
+        algae.push(new Algae(i*Math.random()*200+100, 300,300,context.canvas.height,2,0, context, 'assets/algae.png'));
     }
 
-    for (var i = 0; i < 8; i++){
-        clouds[i].draw();
-    } 
-  
+
+    function draw(){
+        context.clearRect(0, 0, context.canvas.width, context.canvas.height);
+        context.fillStyle = '#1f41db';
+        context.fillRect(0, 0, context.canvas.width, context.canvas.height);
     
-}
+        for (var i = 0; i < 8; i++){
+            clouds[i].moveScenery();
+            algae[i].moveScenery();
+            clouds[i].draw();
+            algae[i].draw();
+        }
+    }
+    
+setInterval(draw, 30);
 
-
-draw();
