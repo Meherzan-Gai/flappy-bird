@@ -114,8 +114,8 @@
     
    
     for (var i = 0; i < 8; i++){
-        clouds.push(new Cloud(i*Math.random()*200+100, Math.random()*200,60,40, Math.random() * 2, Math.random()*1 , context, 'assets/bubbles.png'));
-        algae.push(new Algae(i*Math.random()*200+100, 300,300,context.canvas.height,2,0, context, 'assets/algae.png'));
+        clouds.push(new Cloud(i*Math.random()*200+100, Math.random()*200,60,40, Math.random() * 5, Math.random()*2 , context, 'assets/bubbles.png'));
+        algae.push(new Algae(i*200,300,300,context.canvas.height,5,0, context, 'assets/algae.png'));
     }
 
 
