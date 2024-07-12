@@ -1,8 +1,9 @@
     class Fish {
-        constructor(img, width, height, context){
-            this.img = img;
-            this.x = 100;
-            this.y = 100;
+        constructor(src, width, height, context){
+            this.img = new Image(width, height);
+            this.img.src = src;
+            this.x = context.canvas.width/2 - width;
+            this.y = context.canvas.height/2 - height/2;
             this.width = width;
             this.height = height;
             this.context = context;
@@ -104,14 +105,16 @@
     context.canvas.height = bodycontext.clientHeight;
     context.fillStyle = '#1f41db';
     context.fillRect(0,0,context.canvas.width, context.canvas.height);
+    
 
 
+    const fish = new Fish('assets/fish.png',100,60,context);
     const clouds = [];
     const algae = [];
     
    
     for (var i = 0; i < 8; i++){
-        clouds.push(new Cloud(i*Math.random()*200+100, Math.random()*200,40,40, Math.random() * 2, Math.random()*1 , context, 'assets/cloud.jpg'));
+        clouds.push(new Cloud(i*Math.random()*200+100, Math.random()*200,60,40, Math.random() * 2, Math.random()*1 , context, 'assets/bubbles.png'));
         algae.push(new Algae(i*Math.random()*200+100, 300,300,context.canvas.height,2,0, context, 'assets/algae.png'));
     }
 
@@ -120,13 +123,13 @@
         context.clearRect(0, 0, context.canvas.width, context.canvas.height);
         context.fillStyle = '#1f41db';
         context.fillRect(0, 0, context.canvas.width, context.canvas.height);
-    
         for (var i = 0; i < 8; i++){
             clouds[i].moveScenery();
             algae[i].moveScenery();
             clouds[i].draw();
             algae[i].draw();
         }
+        context.drawImage(fish.img, fish.x, fish.y, fish.width, fish.height);
     }
     
 setInterval(draw, 30);

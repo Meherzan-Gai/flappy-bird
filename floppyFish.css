@@ -20,7 +20,7 @@
     margin-top: 1%;
     align-content:space-around;
     text-align: center;
-    background-color:#545f5f;
+    background-color:#140968;
     color:#FBF5F3;
     display:grid;
     justify-content:center;
@@ -29,8 +29,10 @@
 
   canvas{
     width:100%;
-    padding-top: 1%;
-    padding-bottom: 1%;
+    margin-top: 1%;
+    margin-bottom: 1%;
+    border: 2px solid ;
+    border-color: #FFFFFF;
   }
 
  
