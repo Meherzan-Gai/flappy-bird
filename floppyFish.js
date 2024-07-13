@@ -7,22 +7,32 @@
             this.width = width;
             this.height = height;
             this.context = context;
+            this.velocity = 0;
+            this.gravity = 0.01;
+            this.jumpStrength = -1;
+            this.isJumping = false;
         }
     };
     
     Fish.prototype.jump = function(){
-        if (this.y - 5 <= 0){
-            this.y = 0;
-        } else {
-            this.y -= 10;
-        }
+        this.velocity = this.jumpStrength;
+        this.isJumping = false;
     }
     
     Fish.prototype.fall = function(){
-        if (this.y + 5 >= this.context.canvas.height){
-            this.y  = this.context.canvas.height;
-        } else {
-            this.y += 5;
+        if (this.isJumping){
+            this.velocity = this.jumpStrength;
+        } else{
+            this.velocity += this.gravity;
+            this.y += this.velocity;
+
+            if (this.y + this.height > this.context.canvas.height) {
+                this.y = this.context.canvas.height - this.height;
+                this.velocity = 0;
+            } else if (this.y < 0) {
+                this.y = 0;
+                this.velocity = 0;
+            }
         }
     }
     
@@ -109,8 +119,9 @@
 
 
     const fish = new Fish('assets/fish.png',100,60,context);
-    window.addEventListener("keydown", () => {
+    window.addEventListener("keypress", () => {
         if (event.key === ' ') {
+            fish.isJumping = true;
             fish.jump();
         }
     })
@@ -121,10 +132,10 @@
    
     for (var i = 0; i < 10; i++){
         for (var j = 0; j < 5; j++){
-            bubbles.push(new Bubble(Math.random()*context.canvas.width, Math.random()*context.canvas.height ,60,40, Math.random() *2+4, Math.random()*4, context, 'assets/bubbles.png'));
+            bubbles.push(new Bubble(Math.random()*context.canvas.width, Math.random()*context.canvas.height ,60,40, (Math.random() *2+4)/3, Math.random()*4/3, context, 'assets/bubbles.png'));
         }
-        tallAlgae.push(new Algae(i*200,400,300,context.canvas.height/1.2, 5, 0, context, 'assets/algae.png'));
-        shortAlgae.push(new Algae(i*200 + 100,context.canvas.height + 100-context.canvas.height/2, 300, context.canvas.height/2 ,5,0, context, 'assets/algae.png'));
+        tallAlgae.push(new Algae(i*200,400,300,context.canvas.height/1.2, 1.67, 0, context, 'assets/algae.png'));
+        shortAlgae.push(new Algae(i*200 + 100,context.canvas.height + 100-context.canvas.height/2, 300, context.canvas.height/2 ,1.67,0, context, 'assets/algae.png'));
 
     }
 
@@ -144,11 +155,12 @@
                 bubbles[5*i + j].moveScenery();
                 bubbles[5*i + j].draw();
             }
+            fish.fall();
 
 
         }
         context.drawImage(fish.img, fish.x, fish.y, fish.width, fish.height);
     }
     
-setInterval(draw, 30);
+setInterval(draw, 10);
 
