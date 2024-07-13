@@ -14,7 +14,7 @@
         if (this.y - 5 <= 0){
             this.y = 0;
         } else {
-            this.y -= 5;
+            this.y -= 10;
         }
     }
     
@@ -70,8 +70,8 @@
             this.x = this.context.canvas.width;
         }
 
-        if (this.y < 0 || this.y + this.height > 200){
-            this.yMoveAmount *= -1;
+        if (this.y+this.height < 0){
+            this.y = this.context.canvas.height;
         }
     }
     
@@ -87,7 +87,7 @@
     }
     
     
-    class Cloud extends Scenery{
+    class Bubble extends Scenery{
         constructor(x, y, width, height, xMoveAmount, yMoveAmount, context, src){
             super(x, y, width, height, xMoveAmount, yMoveAmount, context);
             this.image.src = src;
@@ -109,13 +109,23 @@
 
 
     const fish = new Fish('assets/fish.png',100,60,context);
-    const clouds = [];
-    const algae = [];
+    window.addEventListener("keydown", () => {
+        if (event.key === ' ') {
+            fish.jump();
+        }
+    })
+    const bubbles = [];
+    const tallAlgae = [];
+    const shortAlgae = [];
     
    
-    for (var i = 0; i < 8; i++){
-        clouds.push(new Cloud(i*Math.random()*200+100, Math.random()*200,60,40, Math.random() * 5, Math.random()*2 , context, 'assets/bubbles.png'));
-        algae.push(new Algae(i*200,300,300,context.canvas.height,5,0, context, 'assets/algae.png'));
+    for (var i = 0; i < 10; i++){
+        for (var j = 0; j < 5; j++){
+            bubbles.push(new Bubble(Math.random()*context.canvas.width, Math.random()*context.canvas.height ,60,40, Math.random() *2+4, Math.random()*4, context, 'assets/bubbles.png'));
+        }
+        tallAlgae.push(new Algae(i*200,400,300,context.canvas.height/1.2, 5, 0, context, 'assets/algae.png'));
+        shortAlgae.push(new Algae(i*200 + 100,context.canvas.height + 100-context.canvas.height/2, 300, context.canvas.height/2 ,5,0, context, 'assets/algae.png'));
+
     }
 
 
@@ -123,11 +133,19 @@
         context.clearRect(0, 0, context.canvas.width, context.canvas.height);
         context.fillStyle = '#1f41db';
         context.fillRect(0, 0, context.canvas.width, context.canvas.height);
-        for (var i = 0; i < 8; i++){
-            clouds[i].moveScenery();
-            algae[i].moveScenery();
-            clouds[i].draw();
-            algae[i].draw();
+        for (var i = 0; i < 10; i++){
+            tallAlgae[i].moveScenery();
+            tallAlgae[i].draw();
+
+            shortAlgae[i].moveScenery();
+            shortAlgae[i].draw();
+
+            for (var j = 0; j < 5; j++){
+                bubbles[5*i + j].moveScenery();
+                bubbles[5*i + j].draw();
+            }
+
+
         }
         context.drawImage(fish.img, fish.x, fish.y, fish.width, fish.height);
     }
