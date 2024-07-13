@@ -8,8 +8,8 @@
             this.height = height;
             this.context = context;
             this.velocity = 0;
-            this.gravity = 0.01;
-            this.jumpStrength = -1;
+            this.gravity = 0.0015;
+            this.jumpStrength = -0.5;
             this.isJumping = false;
         }
     };
@@ -42,11 +42,15 @@
     }
     
     class Gap {
-        constructor(x, height, width, context){
+       
+        constructor(x, y, gapWidth, gapHeight, context){
             this.x = x;
-            this.height = height;
-            this.width = width || 20;
+            this.y = y;
+            this.gapWidth = gapWidth || 20;
+            this.gapHeight = gapHeight || 200;
             this.context = context;
+            this.img = new Image();
+            this.img.src= 'assets/net.png';
         }
     
     
@@ -55,10 +59,12 @@
     
     
     Gap.prototype.draw = function(){
-        this.context.fillRect(this.x - this.width/2, 0, this.width, this.y - this.height/2); // TOP COLLISION PIPE
-    
-        this.context.fillRect(this.x - this.width/2, this.y + this.height/2, this.width, 360 - (this.y + this.height/2)); // BOTTOM COLLISION PIPE)
+        this.context.drawImage(this.img ,this.x, 0, this.gapWidth, this.y); // TOP COLLISION PIPE
+        console.log(this.x, this.y);
+        this.context.drawImage(this.img, this.x, this.y + this.gapHeight, this.width, this.context.canvas.height - (this.y + this.gapHeight)); // BOTTOM COLLISION PIPE)
     }
+
+    
     
     class Scenery{
         constructor(x, y, width, height, xMoveAmount, yMoveAmount, context){
@@ -139,6 +145,13 @@
 
     }
 
+    var gaps = [];
+    for (var i = 0; i < 40; i++) {  
+        gaps.push(new Gap(i * 400+ 400, Math.random() * context.canvas.height, 40, 100, context));
+    }
+
+   
+
 
     function draw(){
         context.clearRect(0, 0, context.canvas.width, context.canvas.height);
@@ -160,6 +173,10 @@
 
         }
         context.drawImage(fish.img, fish.x, fish.y, fish.width, fish.height);
+        for (var k = 0; k < gaps.length; k++) {
+            gaps[k].draw();
+            gaps[k].x -= 2;
+        }
     }
     
 setInterval(draw, 10);
