@@ -11,6 +11,7 @@
             this.gravity = 0.0015;
             this.jumpStrength = -0.5;
             this.isJumping = false;
+            this.lives = 3;
         }
     };
     
@@ -35,6 +36,20 @@
             }
         }
     }
+
+    Fish.prototype.hitObstacle = function(gap) {
+        if (this.x+this.width > gap.x && this.x < gap.x+gap.gapWidth){
+
+            if (this.y < gap.y || this.y + this.height > gap.y + gap.gapHeight){
+
+                if (gap.isHit === false){
+                    this.lives--;
+                    gap.isHit=true;
+                    gap.x = -1000;
+                }
+            }
+        } 
+    }
     
     
     Fish.prototype.draw = function() {
@@ -51,6 +66,7 @@
             this.context = context;
             this.img = new Image();
             this.img.src= 'assets/net.png';
+            this.isHit = false;
         }
     
     
@@ -60,7 +76,6 @@
     
     Gap.prototype.draw = function(){
         this.context.drawImage(this.img ,this.x, 0, this.gapWidth, this.y); // TOP COLLISION PIPE
-        console.log(this.x, this.y);
         //this.context.drawImage(this.img, this.x, this.y + this.gapHeight, this.gapWidth, this.context.canvas.height - (this.y + this.gapHeight)); // BOTTOM COLLISION PIPE)
         this.context.fillStyle = '#70481a'
         this.context.fillRect(this.x, 0 , this.gapWidth, this.y);
@@ -178,8 +193,10 @@
         context.drawImage(fish.img, fish.x, fish.y, fish.width, fish.height);
         for (var k = 0; k < gaps.length; k++) {
             gaps[k].draw();
+            fish.hitObstacle(gaps[k]);
             gaps[k].x -= 2;
         }
+        console.log(fish.lives);
     }
     
 setInterval(draw, 10);
