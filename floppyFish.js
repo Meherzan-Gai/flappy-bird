@@ -67,6 +67,7 @@
             this.img = new Image();
             this.img.src= 'assets/net.png';
             this.isHit = false;
+            this.xMoveAmount = 2;
         }
     
     
@@ -164,7 +165,7 @@
     }
 
     var gaps = [];
-    for (var i = 0; i < 40; i++) {  
+    for (var i = 0; i < 10; i++) {  
         gaps.push(new Gap(i * 400+ 1400, Math.random() * context.canvas.height - 100, 40, 250, context));
     }
 
@@ -194,7 +195,18 @@
         for (var k = 0; k < gaps.length; k++) {
             gaps[k].draw();
             fish.hitObstacle(gaps[k]);
-            gaps[k].x -= 2;
+            gaps[k].x -= gaps[k].xMoveAmount;
+        }
+        context.font = "50px Arial";
+        context.fillStyle = '#FFFFFF';
+        context.fillText("Lives: " + fish.lives, 25, 60);
+
+
+        
+        if (fish.lives <= 0) {
+            context.fillText("YOU LOST :(", context.canvas.width/2 - 150,context.canvas.height/2 - 25);
+        } else if (gaps[gaps.length - 1].x < 0 && fish.lives > 0){
+            context.fillText("YOU WIN!!!",context.canvas.width/2 - 125,context.canvas.height/2 - 25);
         }
         console.log(fish.lives);
     }
